@@ -1,0 +1,263 @@
+#
+# File name: ao_actions.mrl
+# Version: 9.6.00.002
+# Copyright 1998-2010 BMC Software, Inc. All Rights Reserved
+#
+# Below is a rule to trigger the Disk Full workflow in AO.
+# AO needs to be configured before below can be used. Specifically the gateway name (RBAGW) in the mcell.dir of the cell.
+# When Create Change Request is not passed to this action then the default value is considered as "true" 
+# (i.e. create the Change Request)
+
+action 'Atrium Orchestrator Actions'.'Triage and Remediate Disk Full':
+{
+	['Administrator', 'Full Access','BPPM Administrators','Cloud Administrators', 'Data Collection Administrator','BPPM Monitoring Administrators', 'Event Administrator', 'BPPM Model Administrators','Event Operator', 'BPPM Operators','Data Collection Operator', 'Event Operator Supervisor', 'BPPM Supervisors','Data Collection Supervisor']
+}
+[
+ 'Create Change Request':MC_TRUEFALSE($CREATECHANGERQUEST), 
+ 'Change Request Type':MC_CHANGEREQUESTTYPE($CHANGEREQUESTTYPE),
+ 'Create/Update Incident' : MC_TRUEFALSE($CREATEINCIDENT),
+ 'Remediate' : MC_TRUEFALSE($REMEDIATE)
+]
+:EVENT($EV) where [ $EV.status != 'CLOSED' AND $EV.status != 'BLACKOUT']
+#If you want this action to be context sensitive to PATROL Events monitoring Disk usage.
+#Comment above line and uncomment below line.
+#:PATROL_EV($EV) where [ $EV.mc_parameter within ['LDldDiskSpaceUsed' , 'LDLogicalDiskspace' , 'FSCapacity' , 'LDldFreeSpacePercent'] ]
+{
+	action_requestor($UID,$PWD);
+	opadd($EV, "Triage and Remediate Disk Full manual", $UID);
+	admin_execute(BEMGW,$EV,"Atrium_Orchestrator_Disk_Full_Workflow",[$CREATECHANGERQUEST, $CHANGEREQUESTTYPE, $CREATEINCIDENT, $REMEDIATE,$UID],YES);
+}
+END
+
+action 'Atrium Orchestrator Actions'.'Triage Host Down':
+{
+	['Administrator', 'Full Access','BPPM Administrators','Cloud Administrators', 'Data Collection Administrator','BPPM Monitoring Administrators', 'Event Administrator','BPPM Model Administrators', 'Event Operator','BPPM Operators', 'Data Collection Operator', 'Event Operator Supervisor','BPPM Supervisors', 'Data Collection Supervisor']
+}
+[
+ 'Create/Update Incident' : MC_TRUEFALSE($CREATEINCIDENT)
+]
+:EVENT($EV) where [ $EV.status != 'CLOSED' AND $EV.status != 'BLACKOUT']
+#If you want this action to be context sensitive to PATROL Events monitoring Disk usage.
+#Comment above line and uncomment below line.
+#:PATROL_EV($EV) where [ $EV.mc_parameter within []]
+{
+	action_requestor($UID,$PWD);
+	opadd($EV, "Triage Host Down manual", $UID);
+	admin_execute(BEMGW,$EV,"Atrium_Orchestrator_Host_Down_Workflow",["false","dummy",$CREATEINCIDENT,"false",$UID], YES);
+}
+END
+
+action 'Atrium Orchestrator Actions'.'Triage and Remediate ESX Host Not Responding':
+{
+	['Administrator', 'Full Access','BPPM Administrators','Cloud Administrators', 'Data Collection Administrator','BPPM Monitoring Administrators', 'Event Administrator','BPPM Model Administrators', 'Event Operator','BPPM Operators', 'Data Collection Operator', 'Event Operator Supervisor','BPPM Supervisors', 'Data Collection Supervisor']
+}
+[
+ 'Create Change Request':MC_TRUEFALSE($CREATECHANGERQUEST), 
+ 'Change Request Type':MC_CHANGEREQUESTTYPE($CHANGEREQUESTTYPE),
+ 'Create/Update Incident' : MC_TRUEFALSE($CREATEINCIDENT),
+ 'Remediate' : MC_TRUEFALSE($REMEDIATE)
+]
+:EVENT($EV) where [ $EV.status != 'CLOSED' AND $EV.status != 'BLACKOUT']
+#If you want this action to be context sensitive to PATROL Events monitoring Disk usage.
+#Comment above line and uncomment below line.
+#:PATROL_EV($EV) where [ $EV.mc_parameter within ['LDldDiskSpaceUsed' , 'LDLogicalDiskspace' , 'FSCapacity' , 'LDldFreeSpacePercent'] ]
+{
+	action_requestor($UID,$PWD);
+	opadd($EV, "Triage and Remediate ESX Host Not Responding manual", $UID);
+	admin_execute(BEMGW,$EV,"Atrium_Orchestrator_ESX_Host_Not_Responding_Workflow",[$CREATECHANGERQUEST, $CHANGEREQUESTTYPE, $CREATEINCIDENT, $REMEDIATE,$UID],YES);
+}
+END
+
+#DB Tablespace Full workflow
+action 'Atrium Orchestrator Actions'.'Triage and Remediate DB Tablespace Full':
+{
+                ['Administrator', 'Full Access','BPPM Administrators','Cloud Administrators', 'Data Collection Administrator','BPPM Monitoring Administrators', 'Event Administrator','BPPM Model Administrators', 'Event Operator','BPPM Operators', 'Data Collection Operator', 'Event Operator Supervisor','BPPM Supervisors', 'Data Collection Supervisor']
+}
+[
+ 'Create Change Request':MC_TRUEFALSE($CREATECHANGERQUEST), 
+ 'Change Request Type':MC_CHANGEREQUESTTYPE($CHANGEREQUESTTYPE),
+ 'Create/Update Incident' : MC_TRUEFALSE($CREATEINCIDENT),
+ 'Remediate' : MC_TRUEFALSE($REMEDIATE)
+]
+:EVENT($EV) where [ $EV.status != 'CLOSED' AND $EV.status != 'BLACKOUT']
+#If you want this action to be context sensitive to PATROL Events monitoring Disk usage.
+#Comment above line and uncomment below line.
+#:PATROL_EV($EV)
+{
+                action_requestor($UID,$PWD);
+                opadd($EV, "Triage and Remediate DB Tablespace Full manual", $UID);
+                admin_execute(BEMGW,$EV,"Atrium_Orchestrator_DB_Tablespace_Full_Workflow",[$CREATECHANGERQUEST, $CHANGEREQUESTTYPE, $CREATEINCIDENT, $REMEDIATE,$UID],YES);
+}
+END
+
+#Failed Backup and Recovery TSM Workflow
+action 'Atrium Orchestrator Actions'.'Triage and Remediate Failed Backup Recovery Workflow':
+{
+                ['Administrator', 'Full Access','BPPM Administrators','Cloud Administrators', 'Data Collection Administrator','BPPM Monitoring Administrators', 'Event Administrator','BPPM Model Administrators', 'Event Operator','BPPM Operators', 'Data Collection Operator', 'Event Operator Supervisor','BPPM Supervisors', 'Data Collection Supervisor']
+}
+[
+ 'Create Change Request':MC_TRUEFALSE($CREATECHANGERQUEST), 
+ 'Change Request Type':MC_CHANGEREQUESTTYPE($CHANGEREQUESTTYPE),
+ 'Create/Update Incident' : MC_TRUEFALSE($CREATEINCIDENT),
+ 'Remediate' : MC_TRUEFALSE($REMEDIATE)
+]
+:EVENT($EV) where [ $EV.status != 'CLOSED' AND $EV.status != 'BLACKOUT']
+#If you want this action to be context sensitive to PATROL Events monitoring Disk usage.
+#Comment above line and uncomment below line.
+#:PATROL_EV($EV)
+{
+                action_requestor($UID,$PWD);
+                opadd($EV, "Triage and Remediate Failed Backup Recovery manual", $UID);
+                admin_execute(BEMGW,$EV,"Atrium_Orchestrator_Failed_Backup_Recovery_Workflow",[$CREATECHANGERQUEST, $CHANGEREQUESTTYPE, $CREATEINCIDENT, $REMEDIATE,$UID],YES);
+}
+END
+
+#Server Start Utility Workflow
+action 'Atrium Orchestrator Actions'.'Utility - Server Start':
+{
+                ['Administrator', 'Full Access','BPPM Administrators','Cloud Administrators', 'Data Collection Administrator','BPPM Monitoring Administrators', 'Event Administrator','BPPM Model Administrators', 'Event Operator','BPPM Operators', 'Data Collection Operator', 'Event Operator Supervisor','BPPM Supervisors', 'Data Collection Supervisor']
+}
+[
+ 'Create Change Request':MC_TRUEFALSE($CREATECHANGERQUEST), 
+ 'Change Request Type':MC_CHANGEREQUESTTYPE($CHANGEREQUESTTYPE),
+ 'Server Name' : STRING($HOST),
+ 'MAC Address' : STRING($MAC_ADDRESS),
+ 'IP Address' : STRING($IP_ADDRESS),
+ 'Subnet': STRING($SUBNET),
+ 'Port' : STRING($PORT) 
+]
+:EVENT($EV) where [ $EV.status != 'CLOSED' AND $EV.status != 'BLACKOUT']
+{
+                action_requestor($UID,$PWD);
+                opadd($EV, "Triage and Remediate Server Restart", $UID);
+                admin_execute(BEMGW,$EV,"Atrium_Orchestrator_Server_Restart_Workflow",[$CREATECHANGERQUEST, $CHANGEREQUESTTYPE,"false","true",$UID,$HOST,"start",$MAC_ADDRESS,$IP_ADDRESS,$SUBNET,$PORT],YES);
+}
+END
+
+#Server Restart Utility Workflow
+action 'Atrium Orchestrator Actions'.'Utility - Server Restart':
+{
+                ['Administrator', 'Full Access','BPPM Administrators','Cloud Administrators', 'Data Collection Administrator','BPPM Monitoring Administrators', 'Event Administrator','BPPM Model Administrators', 'Event Operator','BPPM Operators', 'Data Collection Operator', 'Event Operator Supervisor','BPPM Supervisors', 'Data Collection Supervisor']
+}
+[
+ 'Create Change Request':MC_TRUEFALSE($CREATECHANGERQUEST), 
+ 'Change Request Type':MC_CHANGEREQUESTTYPE($CHANGEREQUESTTYPE),
+ 'Server Name' : STRING($HOST)
+ ]
+:EVENT($EV) where [ $EV.status != 'CLOSED' AND $EV.status != 'BLACKOUT']
+{
+                action_requestor($UID,$PWD);
+                opadd($EV, "Triage and Remediate Server Restart", $UID);
+                admin_execute(BEMGW,$EV,"Atrium_Orchestrator_Server_Restart_Workflow",[$CREATECHANGERQUEST, $CHANGEREQUESTTYPE,"false","true",$UID,$HOST,"restart"],YES);
+}
+END
+
+#Service Restart Utility  Workflow
+action 'Atrium Orchestrator Actions'.'Utility - Service Restart':
+{
+                ['Administrator', 'Full Access','BPPM Administrators','Cloud Administrators', 'Data Collection Administrator','BPPM Monitoring Administrators', 'Event Administrator','BPPM Model Administrators', 'Event Operator','BPPM Operators', 'Data Collection Operator', 'Event Operator Supervisor','BPPM Supervisors', 'Data Collection Supervisor']
+}
+[
+ 'Create Change Request':MC_TRUEFALSE($CREATECHANGERQUEST), 
+ 'Change Request Type':MC_CHANGEREQUESTTYPE($CHANGEREQUESTTYPE),
+ 'Server Name' : STRING($HOST),
+ 'Service Name' : STRING($SERVICE),
+ 'Service Action' : MC_SERVICEACTIONS($SERVICE_ACTION)
+]
+:EVENT($EV) where [ $EV.status != 'CLOSED' AND $EV.status != 'BLACKOUT']
+{
+                action_requestor($UID,$PWD);
+                opadd($EV, "Triage and Remediate Service Restart", $UID);
+                admin_execute(BEMGW,$EV,"Atrium_Orchestrator_Service_Restart_Workflow",[$CREATECHANGERQUEST, $CHANGEREQUESTTYPE,"false","true",$UID,$HOST,$SERVICE,$SERVICE_ACTION],YES);
+}
+END
+
+#Definition for automatic actions. i.e. without any input parameters.
+
+action 'Atrium Orchestrator Actions-Automatic'.'Triage and Remediate Disk Full':
+{
+	['Administrator', 'Full Access','BPPM Administrators','Cloud Administrators', 'Data Collection Administrator','BPPM Monitoring Administrators', 'Event Administrator','BPPM Model Administrators']
+}
+:EVENT($EV) where [ $EV.status != 'CLOSED' AND $EV.status != 'BLACKOUT']
+{
+	opadd($EV, "Triage and Remediate Disk Full Auto", "BMC Impact Manager");
+	admin_execute(BEMGW,$EV,"Atrium_Orchestrator_Disk_Full_Workflow",["true","normal","true","true","BMC Impact Manager"],YES);
+}
+END
+
+action 'Atrium Orchestrator Actions-Automatic'.'Triage Host Down':
+{
+	['Administrator', 'Full Access','BPPM Administrators','Cloud Administrators', 'Data Collection Administrator','BPPM Monitoring Administrators', 'Event Administrator','BPPM Model Administrators']
+}
+:EVENT($EV) where [ $EV.status != 'CLOSED' AND $EV.status != 'BLACKOUT']
+{
+	opadd($EV, "Triage Host Down Auto", "BMC Impact Manager");
+	admin_execute(BEMGW,$EV,"Atrium_Orchestrator_Host_Down_Workflow",["false","dummy","true","false","BMC Impact Manager"], YES);
+}
+END
+
+action 'Atrium Orchestrator Actions-Automatic'.'Triage and Remediate ESX Host Not Responding':
+{
+	['Administrator', 'Full Access','BPPM Administrators','Cloud Administrators', 'Data Collection Administrator','BPPM Monitoring Administrators', 'Event Administrator','BPPM Model Administrators']
+}
+:EVENT($EV) where [ $EV.status != 'CLOSED' AND $EV.status != 'BLACKOUT']
+{
+	opadd($EV, "Triage and Remediate ESX Host Not Responding Auto", "BMC Impact Manager");
+	admin_execute(BEMGW,$EV,"Atrium_Orchestrator_ESX_Host_Not_Responding_Workflow",["true","normal","true","true","BMC Impact Manager"],YES);
+}
+END
+
+#DB Tablespace Full Workflow - Automatic.
+action 'Atrium Orchestrator Actions-Automatic'.'Triage and Remediate DB Tablespace Full':
+{
+                ['Administrator', 'Full Access','BPPM Administrators','Cloud Administrators', 'Data Collection Administrator','BPPM Monitoring Administrators', 'Event Administrator','BPPM Model Administrators']
+}
+:EVENT($EV) where [ $EV.status != 'CLOSED' AND $EV.status != 'BLACKOUT']
+{
+                opadd($EV, "Triage and Remediate DB Tablespace Full Auto", "BMC Impact Manager");
+                admin_execute(BEMGW,$EV,"Atrium_Orchestrator_DB_Tablespace_Full_Workflow",["true","normal","true","true","BMC Impact Manager"],YES);
+}
+END
+
+#Failed Backup Recovery Workflow - Automatic.
+action 'Atrium Orchestrator Actions-Automatic'.'Triage and Remediate Failed Backup Recovery':
+{
+                ['Administrator', 'Full Access','BPPM Administrators','Cloud Administrators', 'Data Collection Administrator','BPPM Monitoring Administrators', 'Event Administrator','BPPM Model Administrators']
+}
+:EVENT($EV) where [ $EV.status != 'CLOSED' AND $EV.status != 'BLACKOUT']
+{
+                opadd($EV, "Triage and Remediate Failed Backup Recovery Auto", "BMC Impact Manager");
+                admin_execute(BEMGW,$EV,"Atrium_Orchestrator_Failed_Backup_Recovery_Workflow",["true","normal","true","true","BMC Impact Manager"],YES);
+}
+END
+
+#Entry for manual action
+action 'Atrium Orchestrator Actions'.'Triage and Remediate Agent Restart':
+{
+                ['Administrator', 'Full Access', 'Data Collection Administrator', 'Event Administrator', 'Event Operator', 'Data Collection Operator', 'Event Operator Supervisor', 'Data Collection Supervisor', 'BPPM Administrators', 'Cloud Administrators', 'BPPM Monitoring Administrators', 'BPPM Model Administrators', 'BPPM Operators', 'BPPM Supervisors']
+}
+[
+ 'Create Change Request':MC_TRUEFALSE($CREATECHANGERQUEST), 
+ 'Change Request Type':MC_CHANGEREQUESTTYPE($CHANGEREQUESTTYPE),
+ 'Create/Update Incident' : MC_TRUEFALSE($CREATEINCIDENT),
+ 'Remediate' : MC_TRUEFALSE($REMEDIATE)
+]
+:EVENT($EV) where [ $EV.status != 'CLOSED' AND $EV.status != 'BLACKOUT']
+{
+                action_requestor($UID,$PWD);
+                opadd($EV, "Triage and Remediate Agent Restart manual", $UID);
+                admin_execute(BEMGW,$EV,"Atrium_Orchestrator_Agent_Restart_Workflow",[$CREATECHANGERQUEST, $CHANGEREQUESTTYPE, $CREATEINCIDENT, $REMEDIATE,$UID],YES);
+}
+END
+
+#Entry for automatic action
+action 'Atrium Orchestrator Actions-Automatic'.'Triage and Remediate Agent Restart':
+{
+                ['Administrator', 'Full Access', 'Data Collection Administrator', 'Event Administrator', 'Event Operator', 'Data Collection Operator', 'Event Operator Supervisor', 'Data Collection Supervisor', 'BPPM Administrators', 'Cloud Administrators', 'BPPM Monitoring Administrators', 'BPPM Model Administrators', 'BPPM Operators', 'BPPM Supervisors']
+}
+:EVENT($EV) where [ $EV.status != 'CLOSED' AND $EV.status != 'BLACKOUT']
+{
+                opadd($EV, "Triage and Remediate Agent Restart Auto", "BMC Impact Manager");
+                admin_execute(BEMGW,$EV,"Atrium_Orchestrator_Agent_Restart_Workflow",["true","normal","true","true","BMC Impact Manager"],YES);
+}
+END

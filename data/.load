@@ -1,0 +1,32 @@
+#
+# File name: .load
+# Version: 9.6.00.002
+# Copyright 1998-2010 BMC Software, Inc. All Rights Reserved
+#
+di_acl_default
+di_notification_services
+di_timeframes
+di_selectors
+di_policies
+di_models
+sim_self_priority_mapping
+sim_schedules
+sim_downtime_status
+admin_platform_lookup
+ibrsd_bem_selector
+ibrsd_error_association
+ibrsd_event_association
+ibrsd_policy_control
+sample_bem_categorization_data
+sample_bem_policy
+ibrsd_register
+ibrsd_selector
+sample_sim_policy
+di_policy_control
+timezone
+bpm_event_categorization_policy
+itsm_change_task_association
+patrol_event_categorization_policy
+patrol_event_dynamic_enrichment_policy
+di_event_mapping
+patrol_alias

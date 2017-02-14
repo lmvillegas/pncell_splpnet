@@ -1,0 +1,20 @@
+#
+# File name: .load
+# Version: 9.6.00.002
+# Copyright 1998-2010 BMC Software, Inc. All Rights Reserved
+#
+self_collector
+pom_activeevents_collectors
+pom_intelligentevents_collectors
+windows_logs_collectors
+catchall_collector
+pom_byuser_collectors
+mc_bystatus_collectors
+mc_evr_collectors
+bii4p_collectors
+ibrsd_collectors
+mc_sm_collectors
+bco_collector
+itda_collectors
+ppm_sm_collector
+eye_collector

@@ -1,0 +1,139 @@
+#
+# File name: ppm_sm_ev_rules.mrl
+# Version: 9.6.00.002
+# Copyright 1998-2010 BMC Software, Inc. All Rights Reserved
+#
+########################################
+#
+# Rule for Self Monitoring events.
+# Rule for reconciling multiple events raised with different status. \
+#
+######################################## 
+
+new BPPM_Health_Update_to_Close : 
+   # This is an selection criteria for new event. You need to check how we are matching the new and old event. I have added the below criteria on the basis of the class you have provided. 
+   # Change this according to your requirement
+    PPM_SM_EV ($NEW) 
+        where [ $NEW.status == OPEN AND 
+    	       $NEW.mc_object_class == 'PROACTIVENET_COMPONENT' AND 
+    	       $NEW.mc_origin_class == 'PROACTIVENET_SLFMON_COMPONENT' AND 
+    	       $NEW.severity == INFO 
+    	       ]
+       updates PPM_SM_EV ($OLD)
+       # This is an selection criteria for existing event. Change it for your exact requirement
+        where [ $OLD.status != CLOSED AND
+        	$OLD.status != BLACKOUT AND
+	        $OLD.severity > INFO AND 
+	        $OLD.mc_origin_class == 'PROACTIVENET_SLFMON_COMPONENT' AND
+	        $OLD.mc_object_class == 'PROACTIVENET_COMPONENT' AND            
+	        $OLD.mc_object == $NEW.mc_object AND
+	        $OLD.mc_host == $NEW.mc_host
+	   ]
+	{
+		# below statement will close the existing event, If want to do anything else then can add the code here
+		#$OLD.status = $NEW.status;
+		$OLD.status = CLOSED;
+		$NEW.status = CLOSED;
+		#drop_new;
+	}
+END
+
+new BPPM_Health_Update_to_Close2 : 
+   PPM_SM_EV ($NEW) where [
+      $NEW.status == OPEN AND 
+      $NEW.mc_object_class == 'PROACTIVENET_COMPONENT' AND 
+      $NEW.mc_origin_class == 'PROACTIVENET_SLFMON_COMPONENT' AND 
+      $NEW.severity > INFO
+   ]
+   updates PPM_SM_EV ($OLD) where [
+      $OLD.status != CLOSED AND
+      $OLD.severity == 'INFO' AND 
+      $OLD.mc_origin_class == 'PROACTIVENET_SLFMON_COMPONENT' AND
+      $OLD.mc_object_class == 'PROACTIVENET_COMPONENT' AND            
+      $OLD.mc_object == $NEW.mc_object AND
+      $OLD.mc_host == $NEW.mc_host
+   ]
+{
+   $OLD.status = CLOSED;
+}
+END
+
+new BPPM_Health_Drop_Duplicate_Critical: 
+   # This is an selection criteria for new event. You need to check how we are matching the new and old event. I have added the below criteria on the basis of the class you have provided. 
+   # Change this according to your requirement
+    PPM_SM_EV ($NEW) 
+        where [ $NEW.status != BLACKOUT AND 
+    	       $NEW.mc_object_class == 'PROACTIVENET_COMPONENT' AND 
+    	       $NEW.mc_origin_class == 'PROACTIVENET_SLFMON_COMPONENT' AND 
+    	       $NEW.severity == 'CRITICAL' 
+    	       ]
+       updates PPM_SM_EV ($OLD)
+       # This is an selection criteria for existing event. Change it for your exact requirement
+        where [ $OLD.status != BLACKOUT AND 
+        	$OLD.status != CLOSED AND 
+        	$OLD.severity == 'CRITICAL' AND 
+	        $OLD.mc_origin_class == 'PROACTIVENET_SLFMON_COMPONENT' AND
+	        $OLD.mc_object_class == 'PROACTIVENET_COMPONENT' AND            
+	        $OLD.mc_object == $NEW.mc_object AND
+	        $OLD.mc_host == $NEW.mc_host
+	   ]
+	{
+		drop_new; 
+	}
+
+END
+
+
+new BPPM_Health_Drop_Duplicate_Info: 
+   # This is an selection criteria for new event.
+    PPM_SM_EV ($NEW) 
+        where [
+               $NEW.status == OPEN AND 
+    	       $NEW.mc_object_class == 'PROACTIVENET_COMPONENT' AND 
+    	       $NEW.mc_origin_class == 'PROACTIVENET_SLFMON_COMPONENT' AND 
+    	       $NEW.severity == 'INFO' 
+    	       ]
+      triggers
+	{
+		$NEW.status = CLOSED;
+	}
+
+END
+
+new RepeatTicks: 
+PPM_SM_EV($NEW)
+        where [	
+        	$NEW.status == OPEN AND 
+        	$NEW.mc_origin_class == 'PROACTIVENET_SLFMON_COMPONENT' AND
+		$NEW.mc_object_class == 'PROACTIVENET_COMPONENT'
+	]	
+	updates PPM_SM_EV($OLD) 
+	where [
+		$OLD.status == OPEN AND 
+		$OLD.mc_origin_class == 'PROACTIVENET_SLFMON_COMPONENT' AND
+		$OLD.mc_object_class == 'PROACTIVENET_COMPONENT' AND            
+		$OLD.mc_object == $NEW.mc_object AND
+	        $OLD.mc_host == $NEW.mc_host AND
+			$OLD.mc_origin == $NEW.mc_origin
+	]
+	{
+	
+		$OLD.repeat_count=$OLD.repeat_count + 1;
+
+		if ( $OLD.repeat_count < 60 ) then
+		{
+			drop_new;
+			
+		}
+		else 
+		{
+			if ( $OLD.repeat_count == 60 ) then
+			{	
+				$OLD.status=CLOSED;
+				$OLD.repeat_count = 0;		
+			}
+		}
+		
+	}
+	
+ END

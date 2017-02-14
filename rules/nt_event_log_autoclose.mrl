@@ -1,0 +1,165 @@
+#--------------------------------------------------------------------
+# nt_event_log_autoclose.mrl
+# Created by Karlis Peterson, BMC Software, Software Consultant
+# located in %mcell_home%/etc/%cell%/kb/rules
+#--------------------------------------------------------------------
+
+#--------------------------------------------------------------------
+# The next section puts a TIMER on the Windows Event Logs from Patrol
+# The purpose is to "clean" out the console by auto-closing old events.
+# You can adjust the timers for each severity or comment out completely. 
+#--------------------------------------------------------------------
+
+#--------------------------------------------------------------------
+# INFO Windows Event Logs events
+# Default timer = 30 min (1800 seconds)
+#--------------------------------------------------------------------
+
+refine CloseINFO : PATROL_EV($EV) 
+where [
+	$EV.status != CLOSED AND
+	$EV.severity == INFO AND
+	$EV.p_catalog=='NT_EVENTLOG' AND
+	$EV.mc_timeout == 0
+	]
+{
+    $EV.mc_timeout = 1800;
+   }
+END
+
+timer TimeoutTimerINFO: PATROL_EV($EV) 
+where [ 
+	$EV.status != CLOSED AND
+	$EV.p_catalog=='NT_EVENTLOG' AND
+	$EV.severity == INFO 
+	]
+timer_info: == EventTimeout
+{
+  ntadd($EV,'NT_EVENTLOG: event auto-closed by timer');
+  $EV.status = CLOSED;
+}
+END
+
+#--------------------------------------------------------------------
+# WARNING Windows Event Logs events
+# Default timer = 1 hr (3600 seconds)
+#--------------------------------------------------------------------
+
+refine CloseWARNING : PATROL_EV($EV) 
+where [
+	$EV.status != CLOSED AND
+	$EV.severity == WARNING AND
+	$EV.p_catalog=='NT_EVENTLOG' AND
+	$EV.mc_timeout == 0
+	]
+{
+  $EV.mc_timeout = 3600;
+}
+END
+
+timer TimeoutTimerWARNING: PATROL_EV($EV) 
+where [ 
+	$EV.status != CLOSED AND
+	$EV.p_catalog=='NT_EVENTLOG' AND
+	$EV.severity == WARNING 
+	]
+timer_info: == EventTimeout
+{
+  ntadd($EV,'NT_EVENTLOG: event auto-closed by timer');
+  $EV.status = CLOSED;
+}
+END
+
+#--------------------------------------------------------------------
+# MINOR Windows Event Logs events
+# Default timer = 4 hrs (14,400 seconds)
+#--------------------------------------------------------------------
+
+refine CloseMINOR : PATROL_EV($EV) 
+where [
+	$EV.status != CLOSED AND
+	$EV.severity == MINOR AND
+	$EV.p_catalog=='NT_EVENTLOG' AND
+	$EV.mc_timeout == 0
+	]
+{
+   ntadd($EV,'NT_EVENTLOG: event auto-closed by timer');
+  $EV.mc_timeout = 14400;
+}
+END
+
+timer TimeoutTimerMINOR: PATROL_EV($EV) 
+where [ 
+	$EV.status != CLOSED AND
+	$EV.p_catalog=='NT_EVENTLOG' AND
+	$EV.severity == MINOR 
+	]
+timer_info: == EventTimeout
+{
+  ntadd($EV,'NT_EVENTLOG: event auto-closed by timer');
+  $EV.status = CLOSED;
+}
+END
+
+#--------------------------------------------------------------------
+# MAJOR Windows Event Logs events
+# Default timer = 24 hrs (86,400 seconds)
+#--------------------------------------------------------------------
+
+refine CloseMAJOR : PATROL_EV($EV) 
+where [
+	$EV.status != CLOSED AND
+	$EV.severity == MAJOR AND
+	$EV.p_catalog=='NT_EVENTLOG' AND
+	$EV.mc_timeout == 0
+	]
+{
+  $EV.mc_timeout = 86400;
+}
+END
+
+timer TimeoutTimerMAJOR: PATROL_EV($EV) 
+where [ 
+	$EV.status != CLOSED AND
+	$EV.p_catalog=='NT_EVENTLOG' AND
+	$EV.severity == MAJOR 
+	]
+timer_info: == EventTimeout
+{
+  ntadd($EV,'NT_EVENTLOG: event auto-closed by timer');
+  $EV.status = CLOSED;
+}
+END
+
+#--------------------------------------------------------------------
+# CRITICAL Windows Event Logs events
+# Default timer = 48 hrs (172,800 seconds)
+#--------------------------------------------------------------------
+
+
+refine CloseCRITICAL : PATROL_EV($EV) 
+where [
+	$EV.status != CLOSED AND
+	$EV.severity == CRITICAL AND
+	$EV.p_catalog=='NT_EVENTLOG' AND
+	$EV.mc_timeout == 0
+	]
+{
+  $EV.mc_timeout = 172800;
+}
+END
+
+timer TimeoutTimerCRITICAL: PATROL_EV($EV) 
+where [ 
+	$EV.status != CLOSED AND
+	$EV.p_catalog=='NT_EVENTLOG' AND
+	$EV.severity == CRITICAL 
+	]
+timer_info: == EventTimeout
+{
+    ntadd($EV,'NT_EVENTLOG: event auto-closed by timer');
+  $EV.status = CLOSED;
+}
+END
+
+

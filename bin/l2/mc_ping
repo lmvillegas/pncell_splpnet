@@ -1,0 +1,47 @@
+#!/bin/bash
+set -x
+RAIZ=/opt/bmc/monitoreo
+#telefonos=$(cat $RAIZ/telefonos/telef_win.txt)
+BUZONES=$(cat $RAIZ/buzones/Buzones_win.txt)
+Fecha="`date`"
+
+
+
+function SHORTMESSAGE
+{
+  for i in $telefonos
+  do
+  /sistema/alarma/Notificacion/shortmessage 58412${i} "$MENSAJE" > /dev/null 
+  sleep 2
+  done
+}
+
+function CORREO
+{
+   echo "$MENSAJE" > $RAIZ/.mensaje.txt
+   for j in ${BUZONES}
+   do
+   mailx -s "$MENSAJE" ${j}@sti.com.ve < $RAIZ/.mensaje.txt
+   done
+}
+
+
+function PING
+{
+ ping $1 1
+  PROCESO=$?
+
+   if [ $PROCESO -gt 0 ]
+   then
+        echo "Alarma: $1 no responde. Notificar al Personal de Administracion Windows" 
+        MENSAJE=$(echo "Servidor: $1. Mensaje: No responde. Notificar al Personal de Guardia de Adm. Wins.")
+	echo "$Fecha, $MENSAJE" >> $RAIZ/log/Equipo_apagado.log
+        CORREO
+   else
+        echo "$1 Responde Ok"
+   fi
+
+}
+
+
+PING $1

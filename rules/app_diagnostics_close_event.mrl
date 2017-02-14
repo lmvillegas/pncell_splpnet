@@ -1,0 +1,20 @@
+#
+# File name: app_diagnostics_close_event.mrl
+# Version: 9.6.00.002
+# Copyright 1998-2010 BMC Software, Inc. All Rights Reserved
+#
+#-----------------------------------------------------------------------------
+# mc_origin_key is used to store incidentId (ectracted from the AIM link we got in the trap)
+# when we create an event where incident status == 'COMPLETED' we search for event with the 
+# same incident id and close it, this event (status == 'COMPLETED') is also droped.
+#-----------------------------------------------------------------------------
+index myindex : EVENT sorted [mc_origin_key] END
+
+new close_old_event : EVENT($EV)
+   where [$EV.mc_tool_key == 'COMPLETED' AND $EV.status != BLACKOUT AND $EV.mc_origin_key != '' AND $EV.mc_origin_key != "Unknown"]
+	using {index myindex [$EV.mc_origin_key] ($EV_OLD) where [$EV_OLD.status != BLACKOUT]}
+	triggers {
+	  $EV_OLD.status = CLOSED;
+	  drop_new;
+	}
+END

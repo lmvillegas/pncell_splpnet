@@ -1,0 +1,25 @@
+#
+# File name: eye_integration.mrl
+# Version: 9.6.00.002
+# Copyright 1998-2010 BMC Software, Inc. All Rights Reserved
+#
+new deduplication_of_eye_events:
+EYE_EVENT($NEW)
+updates duplicate($OLD) where [$OLD.status != CLOSED]
+{
+	drop_new;
+	incr($OLD.repeat_count);
+}
+
+END
+
+new up_closes_down:
+EYE_EVENT($NEW)
+updates EYE_EVENT($OLD) where [$OLD.mc_object         == $NEW.mc_object AND
+							   $OLD.mc_tool_id        == $NEW.mc_tool_id AND
+							   $OLD.mc_parameter_unit == $NEW.mc_parameter_unit AND
+							   $OLD.status != CLOSED]
+{
+	$OLD.status = CLOSED;
+}
+END

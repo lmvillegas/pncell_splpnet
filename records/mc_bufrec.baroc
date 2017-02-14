@@ -1,0 +1,14 @@
+#
+# File name: mc_bufrec.baroc
+# Version: 9.6.00.002
+# Copyright 1998-2010 BMC Software, Inc. All Rights Reserved
+#
+
+
+RECORD MC_EV_BUFFER DEFINES
+{
+	slotformulas_udid: STRING;
+	dest_cells: LIST_OF STRING;
+	propagation_type: PROPAGATION_TYPE;
+}
+END

@@ -1,0 +1,46 @@
+#
+# File name: patrol_event_dynamic_enrichment_policy.baroc
+# Version: 9.6.00.002
+# Copyright 1998-2010 BMC Software, Inc. All Rights Reserved
+#
+#
+# File name: patrol_event_dynamic_enrichment_policy.baroc
+# Version: 10.0.00
+# Copyright 2012 BMC Software, Inc. All Rights Reserved
+#
+#----------------------------------------------------------
+# Next Generation Platform
+# Copyright 2012 BMC Software, Inc.  All rights reserved.
+# Filename :    patrol_event_dynamic_enrichment_policy
+# Author   :    Manish Doomra
+#----------------------------------------------------------
+#
+#  Used for BMC ProactiveNet Performance Manager [BPPM]
+
+IM_DDEN_POLICY;
+	name='PATROL_Event_Dynamic_Enrichment Policy';
+	description='Patrol Event Enrichment Policy';
+	enabled=1;
+	active_timeframes=[];
+	except_timeframes=[];
+	active_global_timeframes=[];
+	except_global_timeframes=[];
+	selector_name='PATROL_Event';
+	selector_class='PATROL_EV';
+	selector_ecf=*PATROL_Event ($EV);
+	ordinal=0;
+	execution_order=8;
+	event_class='PATROL_EV';
+	lookup_table='DDEN_MATCH_TABLE';
+	lookup_table_tag='enrich-tag_8';
+	match_fields=['mc_object','mc_object_class','p_agent','p_agent_port'];
+	output_fields=['pn_object_id','pn_object_class_id','mc_smc_alias'];
+	trace=NO;
+	data_file='';
+	data_file_separator='';
+	pmep_file='';
+	last_import_time='';
+	last_import_type='';
+	num_of_total_records=0;
+	num_of_failed_records=0;
+END

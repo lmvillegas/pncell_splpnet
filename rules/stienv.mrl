@@ -1,0 +1,47 @@
+
+#
+# File name: stienv.mrl
+# Version: 7.4.00
+# Copyright 1998-2010 BMC Software, Inc. All Rights Reserved
+#
+#################################################################################
+#
+# BMC Impact Integration for PATROL
+#
+# Date     : March , 2004
+# Revision : 
+#
+#################################################################################
+#  Author: Luis Villegas
+#  Created: $Date
+#
+# Modified: $Date: 2017/11/10 8:31:00 $
+# Revision: $Id: stienv.mrl,v 0.1 2016/11/10 8:45:00 lvillegas Exp $
+#
+
+
+
+
+
+################################################################################
+#
+# rules create to configure enviroment of client STI
+#
+################################################################################
+
+#
+#
+#
+#
+refine host_upOrDonw :
+PPM_SM_EV($EV) where [ ( $EV.mc_origin_class == 'PROACTIVENET_SLFMON_COMPONENT' AND $EV.msg contains 'is disconnected' ) ]
+{
+		concat (["El Agente en el Servidor ", $EV.mc_host, " Se encuentra Apagado"], $MSG);
+		$EV.msg = $MSG;
+		execute($EV, mc_ping,[$EV.mc_host], 'yes');
+}
+END
+filter ActionResult: NOPASS
+MC_CELL_ACTION_RESULT($EV) where [ $EV.status == OPEN ]
+END
+

@@ -1,0 +1,16 @@
+#
+# File name: self_collector.mrl
+# Version: 9.6.00.002
+# Copyright 1998-2010 BMC Software, Inc. All Rights Reserved
+#
+
+collector self :
+{
+    r[ 'BPPM Administrators','BPPM Supervisors','BPPM Monitoring Administrators','Cloud Administrators', 'BPPM Viewers', 'BPPM Model Administrators', 'BPPM Operators',
+       'Full Access', 'Read Only', 'Administrator', 'Event Administrator','Event Operator','Event Supervisor','Service Administrators','Service Managers','Service Managers - Senior','Service Operators','Service Operators - Senior']
+    w[ 'BPPM Administrators','BPPM Supervisors','BPPM Monitoring Administrators','Cloud Administrators', 'BPPM Model Administrators','BPPM Operators',
+       'Full Access', 'Administrator', 'Event Administrator','Event Operator','Event Supervisor','Service Administrators','Service Managers','Service Managers - Senior','Service Operators','Service Operators - Senior']
+    x[ 'BPPM Administrators','BPPM Supervisors','BPPM Monitoring Administrators','Cloud Administrators', 'BPPM Model Administrators','BPPM Operators',
+       'Full Access', 'Administrator', 'Event Administrator','Event Operator','Event Supervisor','Service Administrators','Service Managers','Service Managers - Senior','Service Operators','Service Operators - Senior']
+}
+END

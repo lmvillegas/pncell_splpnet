@@ -1,0 +1,10 @@
+#
+# File name: .load
+# Version: 9.6.00.002
+# Copyright 1998-2010 BMC Software, Inc. All Rights Reserved
+#
+em_rec_options
+sim_rec_options
+admin_rec_options
+ibrsd_record
+repropagate

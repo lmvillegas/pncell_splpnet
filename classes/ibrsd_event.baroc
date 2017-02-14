@@ -1,0 +1,13 @@
+#
+# File name: ibrsd_event.baroc
+# Version: 9.6.00.002
+# Copyright 1998-2010 BMC Software, Inc. All Rights Reserved
+#
+
+MC_EV_CLASS : 	IBRSD_EVENT ISA EVENT 	DEFINES  	
+{		
+	product_tier1 : STRING;
+      	product_tier2 : STRING;
+      	product_tier3 : STRING;
+
+}; END

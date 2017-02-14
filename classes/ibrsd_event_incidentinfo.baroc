@@ -1,0 +1,43 @@
+#
+# File name: ibrsd_event_incidentinfo.baroc
+# Version: 9.6.00.002
+# Copyright 1998-2010 BMC Software, Inc. All Rights Reserved
+#
+#---------------------------------------------------------------------
+#  Module 		: Impact Manager
+#  File 		: ibrsd_event_incidentinfo.baroc
+#  Description		: System definitions extensions
+#  Version 		: 1.0
+#  Author		: Anuradha Kumbhar
+#  Created		: $Date 19th Oct 2005
+#  Copyright 2006 BMC Software, Inc.  All rights reserved.
+#----------------------------------------------------
+
+
+ MC_EV_CLASS : 	EVENT_INCIDENT_INFO ISA EVENT 	DEFINES  	
+ {		
+		incident_submitter		: STRING;
+		incident_id 			: STRING;		
+		incident_status 		: STRING;		
+		incident_assignee 		: STRING;
+		incident_assignee_group	: STRING;		
+		date_time				: INTEGER, representation = date;
+		manually_created_incident	: INTEGER , default=0;
+		event_mc_ueid			: STRING;
+		incident_priority		: STRING;
+		event_ids			: LIST_OF STRING;
+		Temp01 : STRING;
+		Temp02 : STRING;
+		Temp03 : STRING;
+		Temp04 : STRING;
+		Temp05 : STRING;
+		Temp06 : STRING;
+		Temp07 : STRING;
+		Temp08 : STRING;
+		Temp09 : STRING;		
+		Temp10 : STRING;
+	}; END
+
+#---------------------------------------------------------------------
+#   End Of file
+#---------------------------------------------------------------------
